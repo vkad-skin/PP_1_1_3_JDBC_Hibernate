@@ -22,7 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
                   `id` bigint NOT NULL AUTO_INCREMENT,
                   `name` varchar(45) NOT NULL,
                   `last_name` varchar(45) NOT NULL,
-                  `age` int NOT NULL,
+                  `age` tinyint NOT NULL,
                   PRIMARY KEY (`id`)
                 )         
                 """;
@@ -48,6 +48,7 @@ public class UserDaoJDBCImpl implements UserDao {
         String saveUser = "INSERT INTO users (name,  last_name, age) values (?, ?, ?);";
 
         try (PreparedStatement preparedStatement= connection.prepareStatement(saveUser)) {
+
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);

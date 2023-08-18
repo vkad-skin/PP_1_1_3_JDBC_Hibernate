@@ -29,7 +29,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()){
             statement.executeUpdate(createdSQL);
+            connection.commit();
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
@@ -39,7 +47,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()){
             statement.executeUpdate(dropSQL);
+            connection.commit();
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
@@ -54,8 +70,16 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setByte(3, age);
 
             preparedStatement.executeUpdate();
+            connection.commit();
             System.out.printf("User с именем – %s добавлен в базу данных \n", name);
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
@@ -67,7 +91,15 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.setLong(1, id);
 
             statement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
@@ -102,7 +134,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(cleanSQL);
+            connection.commit();
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }

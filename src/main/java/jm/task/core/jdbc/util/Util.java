@@ -17,7 +17,7 @@ public class Util {
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            connection.setAutoCommit(true);
+            connection.setAutoCommit(false);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

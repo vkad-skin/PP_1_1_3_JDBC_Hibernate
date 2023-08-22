@@ -22,14 +22,22 @@ public class UserDaoJDBCImpl implements UserDao {
                   `id` bigint NOT NULL AUTO_INCREMENT,
                   `name` varchar(45) NOT NULL,
                   `last_name` varchar(45) NOT NULL,
-                  `age` int NOT NULL,
+                  `age` tinyint NOT NULL,
                   PRIMARY KEY (`id`)
                 )         
                 """;
 
         try (Statement statement = connection.createStatement()){
             statement.executeUpdate(createdSQL);
+            connection.commit();
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
@@ -39,7 +47,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()){
             statement.executeUpdate(dropSQL);
+            connection.commit();
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
@@ -48,13 +64,22 @@ public class UserDaoJDBCImpl implements UserDao {
         String saveUser = "INSERT INTO users (name,  last_name, age) values (?, ?, ?);";
 
         try (PreparedStatement preparedStatement= connection.prepareStatement(saveUser)) {
+
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
 
             preparedStatement.executeUpdate();
+            connection.commit();
             System.out.printf("User с именем – %s добавлен в базу данных \n", name);
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
@@ -66,7 +91,15 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.setLong(1, id);
 
             statement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
@@ -101,7 +134,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(cleanSQL);
+            connection.commit();
         } catch (SQLException e) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException(e);
         }
     }
